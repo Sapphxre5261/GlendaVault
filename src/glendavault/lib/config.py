@@ -2,10 +2,10 @@ import configparser
 import base64
 import os
 
-ini_filename = "lib/vault_config.ini"
+# ini_filename = "lib/vault_config.ini"
 
 # --- ส่วนที่ 1: บันทึกข้อมูลลงไฟล์ .ini ---
-def save_ini_config_salt():
+def save_ini_config_salt(file_name):
     # 1. สุ่ม Salt เหมือนเดิม
     raw_salt = os.urandom(32)
     salt_str = base64.b64encode(raw_salt).decode('utf-8')
@@ -15,25 +15,24 @@ def save_ini_config_salt():
     
     # 3. กำหนดหมวดหมู่ (Section) และค่าที่จะเก็บ
     config['Settings'] = {
-        'salt': salt_str,
-        'iterations': '100000'
+        'salt': salt_str
     }
     
     # 4. เขียนลงไฟล์ .ini
-    with open(ini_filename, 'w', encoding='utf-8') as f:
+    with open(file_name, 'w', encoding='utf-8') as f:
         config.write(f)
         
     print("บันทึกไฟล์ .ini สำเร็จ!")
     print(f"ค่า Salt ที่แปลงแล้ว: {salt_str}\n")
 
 # --- ส่วนที่ 2: อ่านข้อมูลกลับมาจากไฟล์ .ini ---
-def load_ini_config_salt():
-    if not os.path.exists(ini_filename):
+def load_ini_config_salt(file_name):
+    if not os.path.exists(file_name):
         print("ยังไม่มีไฟล์ .ini กรุณาสร้างก่อน")
         return None
 
     config = configparser.ConfigParser()
-    config.read(ini_filename, encoding='utf-8')
+    config.read(file_name, encoding='utf-8')
     
     # ดึงค่า salt จากหมวดหมู่ [Settings]
     salt_str = config['Settings']['salt']
