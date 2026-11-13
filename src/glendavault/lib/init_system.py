@@ -6,11 +6,17 @@ from config import save_ini_config_salt, load_ini_config_salt
 from gen_key import gen_key_with_password
 
 BASE_DIR = Path(__file__).resolve().parent
-VAULT_DIR = BASE_DIR / "GL_Vault"
+# VAULT_DIR = BASE_DIR / "GL_Vault"
 DB_PATH = VAULT_DIR / "vault.db"
 CONFIG_PATH = VAULT_DIR / "config.ini"
+WORK_SPACE = BASE_DIR / "work_space"
 
 def init_vault(password: str):
+
+    #สร้างและตั้งชื่อตู้เก็บไฟล์
+    valut_name = input("Vault Name : ")
+    VAULT_DIR = BASE_DIR / valut_name
+
     """
     ขั้นตอนที่ 1: ตรวจสอบและสร้าง Vault ครั้งแรก
     - สร้างโฟลเดอร์ GL_Vault
@@ -22,7 +28,10 @@ def init_vault(password: str):
     # 1. สร้างโฟลเดอร์ Vault ถ้ายังไม่มี
     if not VAULT_DIR.is_dir():
         os.makedirs(VAULT_DIR)
-        print("-> สร้างโฟลเดอร์ GL_Vault สำเร็จ")
+        print(f"-> Create {VAULT_DIR} folder")
+
+        # os.makedirs(WORK_SPACE) #สร้างโฟลเดอร์สำหรับเอาไหล์ที่ถอดรหัสกลับมาใช้งาน
+        # print("-> Create work_space folder") 
                                                                                                         
         # สร้างและบันทึก Salt สำหรับรหัสผ่าน
         save_ini_config_salt(CONFIG_PATH)
